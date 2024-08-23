@@ -73,37 +73,41 @@ function ClienteForm() {
     };
 
     return (
-        <div>
+        <div className='container mt-4'>
             <h2>{id ? 'Editar Cliente' : 'Adicionar Cliente'}</h2>
             <form onSubmit={saveOrUpdateCliente}>
-                <div>
-                    <label>Nome:</label>
+                <div className="mb-3">
+                    <label className="form-label">Nome:</label>
                     <input
                         type="text"
+                        className="form-control"
                         value={nome}
                         onChange={(e) => setNome(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label>Endereço:</label>
+                <div className="mb-3">
+                    <label className="form-label">Endereço:</label>
                     <input
                         type="text"
+                        className="form-control"
                         value={endereco}
                         onChange={(e) => setEndereco(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label>Telefones:</label>
+                <div className="mb-3">
+                    <label className="form-label">Telefones:</label>
                     {telefones.map((telefone, index) => (
                         <div key={index}>
                             <input
                                 type="text"
+                                className="form-control"
                                 name="numero"
                                 value={telefone.numero || ''}
                                 onChange={(e) => handleTelefoneChange(index, e)}
                                 placeholder="Número"
                             />
                             <select
+                                className="form-select"
                                 name="tipo"
                                 value={telefone.tipo || ''}
                                 onChange={(e) => handleTelefoneChange(index, e)}
@@ -115,27 +119,28 @@ function ClienteForm() {
                                     </option>
                                 ))}
                             </select>
-                            <button type="button" onClick={() => removeTelefone(index)}>Remover</button>
+                            <button type="button" className="btn btn-danger" onClick={() => removeTelefone(index)}>Remover</button>
                         </div>
                     ))}
-                    <button type="button" onClick={addTelefone}>Adicionar Telefone</button>
+                    <button type="button" className="btn btn-primary" onClick={addTelefone}>Adicionar Telefone</button>
                 </div>
-                <div>
-                    <label>Emails:</label>
+                <div className="mb-3">
+                    <label className="form-label">Emails:</label>
                     {emails.map((email, index) => (
-                        <div key={index}>
+                        <div className="input-grup mb2" key={index}>
                             <input
                                 type="email"
+                                className="form-control"
                                 value={email.endereco || ''}
                                 onChange={(e) => handleEmailChange(index, e)}
                                 placeholder="Email"
                             />
-                            <button type="button" onClick={() => removeEmail(index)}>Remover</button>
+                            <button type="button" className="btn btn-danger" onClick={() => removeEmail(index)}>Remover</button>
                         </div>
                     ))}
-                    <button type="button" onClick={addEmail}>Adicionar Email</button>
+                    <button type="button" className="btn btn-primary" onClick={addEmail}>Adicionar Email</button>
                 </div>
-                <button type="submit">Salvar</button>
+                <button type="submit" className="btn btn-success">Salvar</button>
             </form>
         </div>
     );
