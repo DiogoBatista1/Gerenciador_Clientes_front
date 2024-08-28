@@ -8,6 +8,7 @@ function ClienteForm() {
     const [telefones, setTelefones] = useState([{ numero: '', tipo: '' }]);
     const [emails, setEmails] = useState([{ endereco: '' }]);
     const [tiposTelefone, setTiposTelefone] = useState([]);
+    const [redesSociais, setRedesSociais] = useState([{ nome: '', url: '', tipo: 'OUTRO' }]);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ function ClienteForm() {
                 setEndereco(cliente.endereco);
                 setTelefones(cliente.telefones || [{ numero: '', tipo: '' }]);
                 setEmails(cliente.emails || [{ endereco: '' }]);
+                setRedesSociais(cliente.redesSociais || [{ nome: '', url: '', tipo: 'OUTRO' }]);
             }).catch(error => console.error('Erro ao buscar cliente:', error));
         }
 
@@ -39,12 +41,22 @@ function ClienteForm() {
         setEmails(newEmails);
     };
 
+    const handleRedeSocialChange = (index, event) => {
+        const newRedesSociais = [...redesSociais];
+        newRedesSociais[index] = { ...newRedesSociais[index], [event.target.name]: event.target.value };
+        setRedesSociais(newRedesSociais);
+    };
+
     const addTelefone = () => {
         setTelefones([...telefones, { numero: '', tipo: '' }]);
     };
 
     const addEmail = () => {
         setEmails([...emails, { endereco: '' }]);
+    };
+
+    const addRedeSocial = () => {
+        setRedesSociais([...redesSociais, { nome: '', url: '', tipo: 'OUTRO' }]);
     };
 
     const removeTelefone = (index) => {
@@ -57,9 +69,14 @@ function ClienteForm() {
         setEmails(newEmails);
     };
 
+    const removeRedeSocial = (index) => {
+        const newRedesSociais = redesSociais.filter((_, i) => i !== index);
+        setRedesSociais(newRedesSociais);
+    };
+
     const saveOrUpdateCliente = (e) => {
         e.preventDefault();
-        const cliente = { nome, endereco, telefones, emails };
+        const cliente = { nome, endereco, telefones, emails, redesSociais };
 
         if (id) {
             ClienteService.updateCliente(id, cliente).then(() => {
@@ -73,7 +90,7 @@ function ClienteForm() {
     };
 
     return (
-        <div className='container mt-4'>
+        <div className='container mt-4' style={{ paddingBottom: '80px' }}>
             <h2>{id ? 'Editar Cliente' : 'Adicionar Cliente'}</h2>
             <form onSubmit={saveOrUpdateCliente}>
                 <div className="mb-3">
@@ -98,16 +115,21 @@ function ClienteForm() {
                     <label className="form-label">Telefones:</label>
                     {telefones.map((telefone, index) => (
                         <div key={index}>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="numero"
-                                value={telefone.numero || ''}
-                                onChange={(e) => handleTelefoneChange(index, e)}
-                                placeholder="Número"
-                            />
+                            <div className="input-group mb-2" key={index}>
+
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="numero"
+                                    value={telefone.numero || ''}
+                                    onChange={(e) => handleTelefoneChange(index, e)}
+                                    placeholder="Número"
+                                />
+                                <button type="button" className="btn btn-danger" onClick={() => removeTelefone(index)}>Remover</button>
+                            </div>
+
                             <select
-                                className="form-select"
+                                className="form-select mt-2"
                                 name="tipo"
                                 value={telefone.tipo || ''}
                                 onChange={(e) => handleTelefoneChange(index, e)}
@@ -119,15 +141,14 @@ function ClienteForm() {
                                     </option>
                                 ))}
                             </select>
-                            <button type="button" className="btn btn-danger" onClick={() => removeTelefone(index)}>Remover</button>
                         </div>
                     ))}
-                    <button type="button" className="btn btn-primary" onClick={addTelefone}>Adicionar Telefone</button>
+                    <button type="button" className="btn btn-primary mt-2" onClick={addTelefone}>Adicionar Telefone</button>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Emails:</label>
                     {emails.map((email, index) => (
-                        <div className="input-grup mb2" key={index}>
+                        <div className="input-group mb-2" key={index}>
                             <input
                                 type="email"
                                 className="form-control"
@@ -140,6 +161,40 @@ function ClienteForm() {
                     ))}
                     <button type="button" className="btn btn-primary" onClick={addEmail}>Adicionar Email</button>
                 </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Redes Sociais:</label>
+                    {redesSociais.map((redeSocial, index) => (
+                        <div key={index} className="mb-2">
+                            <select
+                                className="form-select"
+                                name="tipo"
+                                value={redeSocial.tipo || ''}
+                                onChange={(e) => handleRedeSocialChange(index, e)}
+                            >
+                                <option value="FACEBOOK">Facebook</option>
+                                <option value="TWITTER">Twitter</option>
+                                <option value="LINKEDIN">LinkedIn</option>
+                                <option value="INSTAGRAM">Instagram</option>
+                                <option value="OUTRO">Outro</option>
+                            </select>
+                            <div className="input-group mb-2" key={index}>
+                                <input
+                                    type="text"
+                                    className="form-control mt-2"
+                                    name="url"
+                                    value={redeSocial.url || ''}
+                                    onChange={(e) => handleRedeSocialChange(index, e)}
+                                    placeholder="URL"
+                                />
+                                <button type="button" className="btn btn-danger mt-2" onClick={() => removeRedeSocial(index)}>Remover</button>
+                            </div>
+
+                        </div>
+                    ))}
+                    <button type="button" className="btn btn-primary mt-2" onClick={addRedeSocial}>Adicionar Rede Social</button>
+                </div>
+
                 <button type="submit" className="btn btn-success">Salvar</button>
             </form>
         </div>

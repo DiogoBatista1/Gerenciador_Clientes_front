@@ -17,6 +17,7 @@ const styles = {
         color: 'white',
         textAlign: 'center',
         padding: '10px 0',
+        marginTop: '20px',
     },
     text: {
         margin: 0

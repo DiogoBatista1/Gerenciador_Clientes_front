@@ -83,6 +83,7 @@ function ClienteList() {
                                         <th>Endereço</th>
                                         <th>Telefone</th>
                                         <th>Email</th>
+                                        <th>Redes Sociais</th>
                                         <th className="text-center">Ações</th>
                                     </tr>
                                 </thead>
@@ -113,6 +114,31 @@ function ClienteList() {
                                                         cliente.emails.map(e => <p key={e.id}>{e.endereco}</p>)
                                                     ) : (
                                                         <p>{cliente.emails[0]?.endereco || "Sem email"}</p>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                {expandedCliente === cliente.id ? (
+                                                        cliente.redesSociais.map((redeSocial, index) => (
+                                                            <p key={index}>
+                                                                <a 
+                                                                  href={redeSocial.url} 
+                                                                  target="_blank" 
+                                                                  rel="noopener noreferrer"
+                                                                >
+                                                                  {redeSocial.nome}
+                                                                </a>
+                                                            </p>
+                                                        ))
+                                                    ) : (
+                                                        <p>
+                                                            <a 
+                                                                href={cliente.redesSociais[0]?.url || "#"}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {cliente.redesSociais[0]?.nome || "Sem redes sociais"}
+                                                            </a>
+                                                        </p>
                                                     )}
                                                 </td>
                                                 <td className="text-center">
