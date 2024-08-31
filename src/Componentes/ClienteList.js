@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import ClienteService from "../Servicos/ClienteService";
 import { Link } from 'react-router-dom';
 import { Table, Button, Alert, Container, Row, Col } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+
 
 function ClienteList() {
     const [clientes, setClientes] = useState([]);
@@ -20,6 +23,18 @@ function ClienteList() {
                 console.error(error);
             });
     }, []);
+
+    useEffect(() => {
+        if(searchTerm) {
+            ClienteService.pesquisarClientes(searchTerm)
+                .then((response) => setClientes(response.data))
+                .catch((error) => console.error(error));
+        } else {
+            ClienteService.getAllClientes()
+                .then((response) => setClientes(response.data))
+                .catch((error) => console.error(error));
+        }
+    }, [searchTerm])
 
     const deleteCliente = (id) => {
         ClienteService.deleteCliente(id)
@@ -104,9 +119,18 @@ function ClienteList() {
                                                 <td>{cliente.endereco}</td>
                                                 <td>
                                                     {expandedCliente === cliente.id ? (
-                                                        cliente.telefones.map(t => <p key={t.id}>{t.numero}</p>)
+                                                        cliente.telefones.map(t => (
+                                                            <p key={t.id}>
+                                                                <FontAwesomeIcon icon={faPhone} style={{ marginRight: '5px' }} />
+                                                                <a href={`https://wa.me/${t.numero}`} target="_blank" rel="noopener noreferrer">
+                                                                    {t.numero}</a>
+                                                            </p>
+                                                        ))
                                                     ) : (
-                                                        <p>{cliente.telefones[0]?.numero || "Sem telefone"}</p>
+                                                        <p>
+                                                            <FontAwesomeIcon icon={faPhone} style={{ marginRight: '5px' }} />
+                                                            {cliente.telefones[0]?.numero || "Sem telefone"}
+                                                        </p>
                                                     )}
                                                 </td>
                                                 <td>
@@ -117,30 +141,41 @@ function ClienteList() {
                                                     )}
                                                 </td>
                                                 <td>
-                                                {expandedCliente === cliente.id ? (
-                                                        cliente.redesSociais.map((redeSocial, index) => (
-                                                            <p key={index}>
-                                                                <a 
-                                                                  href={redeSocial.url} 
-                                                                  target="_blank" 
-                                                                  rel="noopener noreferrer"
-                                                                >
-                                                                  {redeSocial.nome}
-                                                                </a>
-                                                            </p>
-                                                        ))
+                                                    {expandedCliente === cliente.id ? (
+                                                        cliente.redesSociais.length > 0 ? (
+                                                            <div className="social-buttons-group">
+                                                                {cliente.redesSociais.map((redeSocial, index) => (
+                                                                    <a
+                                                                        key={index}
+                                                                        href={redeSocial.url}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className={`btn btn-social ${redeSocial.nome.toLowerCase()} btn-sm`}
+                                                                    >
+                                                                        {redeSocial.nome}
+                                                                    </a>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <p>Sem redes sociais</p>
+                                                        )
                                                     ) : (
                                                         <p>
-                                                            <a 
-                                                                href={cliente.redesSociais[0]?.url || "#"}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                            >
-                                                                {cliente.redesSociais[0]?.nome || "Sem redes sociais"}
-                                                            </a>
+                                                            {cliente.redesSociais.length > 0 ? (
+                                                                <a
+                                                                    href={cliente.redesSociais[0]?.url || "#"}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={`btn btn-social ${cliente.redesSociais[0]?.nome.toLowerCase()} btn-sm`}
+                                                                >
+                                                                    {cliente.redesSociais[0]?.nome || "Sem redes sociais"}
+                                                                </a>
+                                                            ) : "Sem redes sociais"}
                                                         </p>
                                                     )}
                                                 </td>
+
+
                                                 <td className="text-center">
                                                     <div className="btn-group" role="group" aria-label="Ações">
                                                         <Link to={`/edit/${cliente.id}`} className="btn btn-warning btn-sm ml-2">
@@ -167,7 +202,7 @@ function ClienteList() {
                     )}
                 </Col>
             </Row>
-        </Container>
+        </Container >
     );
 }
 

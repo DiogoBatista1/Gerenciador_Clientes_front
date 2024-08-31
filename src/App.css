@@ -1,0 +1,66 @@
+table th, table td {
+    text-align: left;
+    line-height: 1.5;
+}
+
+table tbody tr {
+    margin-bottom: 10px;
+}
+
+table th:nth-child(1), table td:nth-child(1) {
+    width: 20%;
+}
+
+table th:nth-child(2), table td:nth-child(2) {
+    width: 25%;
+}
+
+td p {
+    margin-bottom: 5px;
+    padding-left: 10px;
+}
+
+.btn-social {
+    color: white;
+    margin-right: 5px;
+    text-align: center;
+    width: 60%; 
+}
+
+.btn-social.whatsapp {
+    background-color: #25D366;
+    border-color: #25D366;
+}
+
+.btn-social.facebook {
+    background-color: #3b5998;
+    border-color: #3b5998;
+}
+
+.btn-social.twitter {
+    background-color: #1DA1F2;
+    border-color: #1DA1F2;
+}
+
+.btn-social.instagram {
+    background-color: #E1306C;
+    border-color: #E1306C;
+}
+
+.btn-social.linkedin {
+    background-color: #0077B5;
+    border-color: #0077B5;
+}
+
+.btn-social.outro {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-social {
+    color: white !important;
+}
+
+.social-buttons-group {
+    display: flex;
+}

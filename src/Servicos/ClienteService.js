@@ -41,7 +41,11 @@ class ClienteService {
 
     getTiposTelefone() {
         return axios.get(`${API_URL}/tipos-telefone`);
-    }    
+    }  
+    
+    pesquisarClientes(nome) {
+        return axios.get(`${API_URL}/clientes/pesquisa?nome=${nome}`)
+    }
 }
 
 const clienteServiceInstance = new ClienteService();
