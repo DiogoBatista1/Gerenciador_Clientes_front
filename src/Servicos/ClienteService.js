@@ -44,7 +44,7 @@ class ClienteService {
     }  
     
     pesquisarClientes(nome) {
-        return axios.get(`${API_URL}/clientes/pesquisa?nome=${nome}`)
+        return axios.get(`${API_URL}/pesquisar?nome=${nome}`)
     }
 }
 
