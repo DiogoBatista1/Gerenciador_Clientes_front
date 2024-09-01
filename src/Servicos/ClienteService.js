@@ -46,6 +46,16 @@ class ClienteService {
     pesquisarClientes(nome) {
         return axios.get(`${API_URL}/pesquisar?nome=${nome}`)
     }
+
+    getClientesPaginados = (page, size, searchTerm) => {
+        return axios.get(API_URL, {
+            params: {
+                page: page,
+                size: size,
+                searchTerm: searchTerm
+            }
+        });
+    };
 }
 
 const clienteServiceInstance = new ClienteService();

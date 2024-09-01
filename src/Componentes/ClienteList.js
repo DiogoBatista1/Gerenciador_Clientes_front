@@ -3,38 +3,35 @@ import ClienteService from "../Servicos/ClienteService";
 import { Link } from 'react-router-dom';
 import { Table, Button, Alert, Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-
+import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import ReactPaginate from 'react-paginate';
 
 function ClienteList() {
     const [clientes, setClientes] = useState([]);
     const [expandedCliente, setExpandedCliente] = useState(null);
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(() => {
-        ClienteService.getAllClientes()
-            .then((response) => {
-                setClientes(response.data);
-                setError(null);
-            })
-            .catch((error) => {
-                setError('Não foi possível carregar os dados dos clientes.');
-                console.error(error);
-            });
-    }, []);
+
+    const fetchClientes = async (page, search) => {
+        try {
+            const response = await ClienteService.getClientesPaginados(page, 10, search);
+            const data = response.data;
+            setClientes(data.content);
+            setPageCount(data.totalPages);
+            setError(null);
+        } catch (err) {
+            setError('Não foi possível carregar os dados dos clientes.');
+            console.error(err);
+        } 
+    }
+
 
     useEffect(() => {
-        if(searchTerm) {
-            ClienteService.pesquisarClientes(searchTerm)
-                .then((response) => setClientes(response.data))
-                .catch((error) => console.error(error));
-        } else {
-            ClienteService.getAllClientes()
-                .then((response) => setClientes(response.data))
-                .catch((error) => console.error(error));
-        }
-    }, [searchTerm])
+        fetchClientes(currentPage, searchTerm)
+    }, [currentPage, searchTerm]);
 
     const deleteCliente = (id) => {
         ClienteService.deleteCliente(id)
@@ -51,6 +48,13 @@ function ClienteList() {
     const toggleExpandCliente = (id) => {
         setExpandedCliente(expandedCliente === id ? null : id);
     };
+
+    const handlePageClick = (data) => {
+        const newPage = data.selected;
+        setCurrentPage(newPage);
+        fetchClientes(newPage, searchTerm);
+    };
+
 
     return (
         <Container>
@@ -76,7 +80,10 @@ function ClienteList() {
                         type="text"
                         placeholder="Pesquisar cliente por nome"
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(0);
+                        }}
                         className="form-control mb-4"
                         style={{
                             height: '40px'
@@ -198,6 +205,23 @@ function ClienteList() {
                                         ))}
                                 </tbody>
                             </Table>
+                            <ReactPaginate
+                                previousLabel={"Anterior"}
+                                nextLabel={"Próximo"}
+                                breakLabel={"..."}
+                                pageCount={pageCount}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={handlePageClick}
+                                containerClassName={"pagination justify-content-center"}
+                                pageClassName={"page-item"}
+                                pageLinkClassName={"page-link"}
+                                previousClassName={"page-item"}
+                                nextClassName={"page-item"}
+                                previousLinkClassName={"page-link"}
+                                nextLinkClassName={"page-link"}
+                                activeClassName={"active"}
+                            />
                         </div>
                     )}
                 </Col>
