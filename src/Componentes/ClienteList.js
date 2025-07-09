@@ -118,8 +118,6 @@ function ClienteList() {
                                             <tr
                                                 key={cliente.id}
                                                 onClick={() => toggleExpandCliente(cliente.id)}
-                                                onMouseEnter={() => setExpandedCliente(cliente.id)}
-                                                onMouseLeave={() => setExpandedCliente(null)}
                                                 style={{ cursor: 'pointer' }}
                                             >
                                                 <td>{cliente.nome}</td>
@@ -157,9 +155,9 @@ function ClienteList() {
                                                                         href={redeSocial.url}
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
-                                                                        className={`btn btn-social ${redeSocial.nome.toLowerCase()} btn-sm`}
+                                                                        className={`btn btn-social ${redeSocial.tipo.toLowerCase()} btn-sm`}
                                                                     >
-                                                                        {redeSocial.nome}
+                                                                        {redeSocial.tipo}
                                                                     </a>
                                                                 ))}
                                                             </div>
@@ -173,9 +171,9 @@ function ClienteList() {
                                                                     href={cliente.redesSociais[0]?.url || "#"}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
-                                                                    className={`btn btn-social ${cliente.redesSociais[0]?.nome.toLowerCase()} btn-sm`}
+                                                                    className={`btn btn-social ${cliente.redesSociais[0]?.tipo.toLowerCase()} btn-sm`}
                                                                 >
-                                                                    {cliente.redesSociais[0]?.nome || "Sem redes sociais"}
+                                                                    {cliente.redesSociais[0]?.tipo || "Sem redes sociais"}
                                                                 </a>
                                                             ) : "Sem redes sociais"}
                                                         </p>

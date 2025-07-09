@@ -15,17 +15,33 @@ table th:nth-child(2), table td:nth-child(2) {
     width: 25%;
 }
 
+table th:nth-child(3),
+table td:nth-child(3) {
+  width: 140px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 td p {
     margin-bottom: 5px;
     padding-left: 10px;
 }
 
 .btn-social {
-    color: white;
+    color: rgb(255, 255, 255) !important;
     margin-right: 5px;
     text-align: center;
     width: 60%; 
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    text-decoration: none;
 }
+
 
 .btn-social.whatsapp {
     background-color: #25D366;
@@ -54,11 +70,7 @@ td p {
 
 .btn-social.outro {
     background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-.btn-social {
-    color: white !important;
+    border-color: #e1e1ec;
 }
 
 .social-buttons-group {
